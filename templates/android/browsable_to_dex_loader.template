@@ -1,0 +1,40 @@
+{
+    "METADATA": {
+        "NAME": "BrowsableToDexLoader"
+    },
+    "MANIFESTPARAMS": {
+        "BASEPATH": "manifest->application->activity OR manifest->application->activity-alias",
+        "SEARCHPATH": {
+            "intent-filter": {
+                "action": {
+                    "LOOKFOR": {
+                        "TAGVALUEMATCH": "<NAMESPACE>:name=android.intent.action.VIEW"
+                    }
+                },
+                "category": {
+                    "LOOKFOR": {
+                        "TAGVALUEMATCH": "<NAMESPACE>:name=android.intent.category.BROWSABLE"
+                    }
+                },
+                "data": {
+                    "RETURN": ["<NAMESPACE>:host AS @host", "<NAMESPACE>:scheme AS @scheme"]
+                }
+            }
+        },
+        "RETURN": ["<smali>:<NAMESPACE>:name AS @activity_name"]
+    },
+    "CODEPARAMS": {
+        "SEARCH": {
+            "SEARCHFORCALLTOMETHOD": {
+                "METHOD": "Ldalvik/system/DexClassLoader;->loadClass",
+                "RETURN": "<class> AS @DexClassLoader"
+            }
+        },
+        "SEARCH": {
+            "SEARCHFORCALLTOMETHOD": {
+                "METHOD": "Landroid/os/Environment;->getExternalStorageDirectory",
+                "RETURN": "<class> AS @Environment"
+            }
+        }
+    }
+}
